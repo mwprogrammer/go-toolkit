@@ -28,6 +28,6 @@ func New() *slog.Logger {
 	}
 
 	os.Stdout = file
-	return slog.New(slog.NewTextHandler(os.Stdout, nil))
+	return slog.New(slog.NewTextHandler(file, nil))
 
 }
