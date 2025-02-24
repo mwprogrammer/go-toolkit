@@ -8,9 +8,7 @@ import (
 )
 
 
-func New(w http.ResponseWriter, request *http.Request, logger *slog.Logger) bool {
-
-	is_success := true
+func New(w http.ResponseWriter, request *http.Request, logger *slog.Logger) *websocket.Conn {
 
 	upgrader := websocket.Upgrader{}
 
@@ -18,13 +16,12 @@ func New(w http.ResponseWriter, request *http.Request, logger *slog.Logger) bool
 	
 	if err != nil {
 		logger.Error(err.Error())
-		is_success = false
-		return is_success
+		return nil
 	}
 	
 	defer connection.Close()
 
-	return is_success
+	return connection
 
 }
 
