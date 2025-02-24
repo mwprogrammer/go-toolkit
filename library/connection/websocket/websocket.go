@@ -19,8 +19,6 @@ func New(w http.ResponseWriter, request *http.Request, logger *slog.Logger) *web
 		return nil
 	}
 	
-	defer connection.Close()
-
 	return connection
 
 }
