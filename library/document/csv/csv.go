@@ -1,4 +1,4 @@
-package data
+package csv
 
 import (
 	"encoding/csv"
