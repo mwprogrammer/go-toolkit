@@ -1,4 +1,4 @@
-package connections
+package websocket
 
 import (
 	"log/slog"
@@ -8,7 +8,7 @@ import (
 )
 
 
-func New(w http.ResponseWriter, request *http.Request, callback func(*websocket.Conn) error, logger *slog.Logger) bool {
+func New(w http.ResponseWriter, request *http.Request, logger *slog.Logger) bool {
 
 	is_success := true
 
@@ -23,13 +23,6 @@ func New(w http.ResponseWriter, request *http.Request, callback func(*websocket.
 	}
 	
 	defer connection.Close()
-
-	callback_err := callback(connection)
-
-	if callback_err != nil {
-		logger.Error(callback_err.Error())
-		is_success = false
-	}
 
 	return is_success
 
