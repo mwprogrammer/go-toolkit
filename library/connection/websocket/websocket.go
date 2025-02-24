@@ -24,7 +24,7 @@ func New(w http.ResponseWriter, request *http.Request, logger *slog.Logger) *web
 }
 
 
-func OnReceive(connection *websocket.Conn, callback func(message string) error, logger *slog.Logger) bool {
+func OnReceive(connection *websocket.Conn, callback func(message string, logger *slog.Logger) error, logger *slog.Logger) bool {
 
 	is_success := true
 
@@ -36,7 +36,7 @@ func OnReceive(connection *websocket.Conn, callback func(message string) error, 
 		return is_success
 	}
 
-	callback_err := callback(string(message))
+	callback_err := callback(string(message), logger)
 
 	if callback_err != nil {
 		logger.Error(callback_err.Error())
