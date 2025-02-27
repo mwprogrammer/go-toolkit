@@ -15,7 +15,7 @@ func Get[T any](url string, token string, logger *slog.Logger) (T, []byte, bool)
 	logger.Info("HTTP REQUEST", "URL", url, "BODY", "")
 
 	var data T
-	var result []byte
+	var raw []byte
 
 	response, err := http.Get(url)
 
@@ -24,7 +24,7 @@ func Get[T any](url string, token string, logger *slog.Logger) (T, []byte, bool)
 		logger.Error(err.Error())
 		is_success = false
 
-		return data, result, is_success
+		return data, raw, is_success
 	}
 
 	defer response.Body.Close()
@@ -45,8 +45,10 @@ func Get[T any](url string, token string, logger *slog.Logger) (T, []byte, bool)
 		}
 		
 	}
+
+	raw = output
 	
-	return data, result, is_success
+	return data, raw, is_success
 
 
 }
@@ -58,7 +60,7 @@ func Post[T any](url string, body []byte, token string, logger *slog.Logger) (T,
 	logger.Info("HTTP REQUEST", "URL", url, "BODY", string(body))
 
 	var data T
-	var result []byte
+	var raw []byte
 
 	response, err := http.Post(url, "application/json", bytes.NewBuffer(body))
 
@@ -67,7 +69,7 @@ func Post[T any](url string, body []byte, token string, logger *slog.Logger) (T,
 		logger.Error(err.Error())
 		is_success = false
 
-		return data, result, is_success
+		return data, raw, is_success
 	}
 
 	defer response.Body.Close()
@@ -86,6 +88,8 @@ func Post[T any](url string, body []byte, token string, logger *slog.Logger) (T,
 		}
 		
 	}
+
+	raw = output
 	
-	return data, output, is_success
+	return data, raw, is_success
 }
