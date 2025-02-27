@@ -8,13 +8,15 @@ import (
 	"net/http"
 )
 
-func Get[T interface{}](url string, token string, logger *slog.Logger) (T, bool) {
+func Get[T any](url string, token string, logger *slog.Logger) (T, []byte, bool) {
 
 	is_success := true
 
 	logger.Info("HTTP REQUEST", "URL", url, "BODY", "")
 
 	var data T
+	var result []byte
+
 	response, err := http.Get(url)
 
 	if err != nil {
@@ -22,7 +24,7 @@ func Get[T interface{}](url string, token string, logger *slog.Logger) (T, bool)
 		logger.Error(err.Error())
 		is_success = false
 
-		return data, is_success
+		return data, result, is_success
 	}
 
 	defer response.Body.Close()
@@ -44,18 +46,20 @@ func Get[T interface{}](url string, token string, logger *slog.Logger) (T, bool)
 		
 	}
 	
-	return data, is_success
+	return data, result, is_success
 
 
 }
 
-func Post[T interface{}](url string, body []byte, token string, logger *slog.Logger) (T, bool){
+func Post[T any](url string, body []byte, token string, logger *slog.Logger) (T, []byte, bool){
 
 	is_success := true
 
 	logger.Info("HTTP REQUEST", "URL", url, "BODY", string(body))
 
 	var data T
+	var result []byte
+
 	response, err := http.Post(url, "application/json", bytes.NewBuffer(body))
 
 	if err != nil {
@@ -63,7 +67,7 @@ func Post[T interface{}](url string, body []byte, token string, logger *slog.Log
 		logger.Error(err.Error())
 		is_success = false
 
-		return data, is_success
+		return data, result, is_success
 	}
 
 	defer response.Body.Close()
@@ -83,5 +87,5 @@ func Post[T interface{}](url string, body []byte, token string, logger *slog.Log
 		
 	}
 	
-	return data, is_success
+	return data, output, is_success
 }
