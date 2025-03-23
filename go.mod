@@ -5,6 +5,7 @@ go 1.23.0
 require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/xuri/excelize/v2 v2.9.0
+	golang.org/x/sys v0.31.0
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 )
 
