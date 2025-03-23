@@ -1,4 +1,4 @@
-package windows
+package service
 
 import (
 	"log"
@@ -10,12 +10,12 @@ import (
 
 var service models.WindowsService
 
-func SetFunction(function func()) {
-	service.Function = function
+func SetName(name string) {
+	service.Name = name
 }
 
-func SetServiceName(name string) {
-	service.Name = name
+func SetFunction(function func()) {
+	service.Function = function
 }
 
 func SetInterval(seconds int64) {
@@ -37,12 +37,15 @@ func Run() {
 		if err != nil {
 			log.Fatalln("Error running service in Debug Mode.")
 		}
-	}
 
-	err := svc.Run(service.Name, &service)
+	} else {
 
-	if err != nil {
-		log.Fatalln("Error running service in Service Control Mode.")
+		err := svc.Run(service.Name, &service)
+
+		if err != nil {
+			log.Fatalln("Error running service in Service Control Mode.")
+		}
+
 	}
 
 }
