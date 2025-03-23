@@ -1,9 +1,8 @@
 # go-utilities
-A collection of opiniated functions I use to make my work building routine background services a little easier.
+A collection of opiniated functions I use to make building go apps easier.
 
 ## Documentation
-1. This is at alpha stage. Lots of bugs, untested code and an evolving list of features that are still in development.
-2. I have a [blog post explaining my motivation behind creating this library]()
+1. This library is in development. I'm dogfooding (hehehe) - [with entertaining results]().
 
 ## Installation
 ```
