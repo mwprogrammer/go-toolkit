@@ -18,7 +18,10 @@ func TestSendMessage(t *testing.T) {
 
 	err := sender.Send(message)
 
-	t.Errorf("Message not sent, error encountered: %s", err.Error())
+	if err != nil {
+		t.Errorf("Message not sent, error encountered: %s", err.Error())
+	}
+
 }
 
 func TestSendMessageWithCC(t *testing.T) {
@@ -34,7 +37,10 @@ func TestSendMessageWithCC(t *testing.T) {
 
 	err := sender.Send(message)
 
-	t.Errorf("Message not sent, error encountered: %s", err.Error())
+	if err != nil {
+		t.Errorf("Message not sent, error encountered: %s", err.Error())
+	}
+
 }
 
 func TestSendMessageWithBCC(t *testing.T) {
@@ -51,7 +57,9 @@ func TestSendMessageWithBCC(t *testing.T) {
 
 	err := sender.Send(message)
 
-	t.Errorf("Message not sent, error encountered: %s", err.Error())
+	if err != nil {
+		t.Errorf("Message not sent, error encountered: %s", err.Error())
+	}
 }
 
 func TestSendMessageWithAttachments(t *testing.T) {
@@ -64,12 +72,15 @@ func TestSendMessageWithAttachments(t *testing.T) {
 	message.AddSubject("TEST SIMPLE MESSAGE WITH ATTACHMENTS")
 	message.AddBody("Test sending message with attachments.")
 
-	err := message.AttachFile("tests/attachments/2025_Computer_Science.pdf")
-	t.Errorf("Attachment not added, error encountered: %s", err.Error())
+	err := message.AttachFile("../tests/attachments/2025_Computer Science.pdf")
 
-	sender.Send(message)
+	if err != nil {
+		t.Errorf("Attachment not added, error encountered: %s", err.Error())
+	}
 
 	err = sender.Send(message)
 
-	t.Errorf("Message not sent, error encountered: %s", err.Error())
+	if err != nil {
+		t.Errorf("Message not sent, error encountered: %s", err.Error())
+	}
 }
