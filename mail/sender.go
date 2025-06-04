@@ -50,10 +50,21 @@ func (s *Sender) Send(email *Message) error {
 		return err
 	}
 
+	defer connection.Close()
+
 	client, err := smtp.NewClient(connection, config.host)
 
 	if err != nil {
 		fmt.Println("Could not create client.")
+		return err
+	}
+
+	defer client.Close()
+
+	err = client.StartTLS(&tlsConfig)
+
+	if err != nil {
+		fmt.Println("Could not start TLS")
 		return err
 	}
 
@@ -64,12 +75,43 @@ func (s *Sender) Send(email *Message) error {
 		return err
 	}
 
-	err = client.StartTLS(&tlsConfig)
+	err = client.Mail(config.username)
 
 	if err != nil {
-		fmt.Println("Could not start TLS")
+		fmt.Println("Could not set sender address:", err)
 		return err
 	}
 
-	return smtp.SendMail(fmt.Sprintf("%s:%s", config.host, config.port), s.auth, config.username, email.to, email.ToBytes())
+	content, recipients := email.ToBytes()
+
+	for _, recipient := range recipients {
+
+		err = client.Rcpt(recipient)
+
+		if err != nil {
+			fmt.Println("Could not set recipient address:", err, recipient)
+			return err
+		}
+
+	}
+
+	wc, err := client.Data()
+
+	if err != nil {
+		fmt.Println("Could not start data transfer:", err)
+		return err
+	}
+
+	defer wc.Close()
+
+	_, err = wc.Write(content)
+
+	if err != nil {
+		fmt.Println("Could not write email body:", err)
+		return err
+	}
+
+	client.Quit()
+
+	return nil
 }

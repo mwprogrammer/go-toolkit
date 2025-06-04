@@ -5,7 +5,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"mime/multipart"
-	"net/http"
+	"net/textproto"
 	"os"
 	"path/filepath"
 	"strings"
@@ -55,57 +55,85 @@ func (m *Message) AttachFile(path string) error {
 	return nil
 }
 
-func (m *Message) ToBytes() []byte {
+func (m *Message) ToBytes() ([]byte, []string) {
 
 	buffer := bytes.NewBuffer(nil)
 
-	buffer.WriteString(fmt.Sprintf("Subject: %s\n", m.subject))
-	buffer.WriteString(fmt.Sprintf("To: %s\n", strings.Join(m.to, ",")))
-
+	header := make(textproto.MIMEHeader)
+	header.Set("Subject", m.subject)
+	header.Set("To", strings.Join(m.to, ", "))
 	if len(m.cc) > 0 {
-		buffer.WriteString(fmt.Sprintf("Cc: %s\n", strings.Join(m.cc, ",")))
+		header.Set("Cc", strings.Join(m.cc, ", "))
 	}
+	header.Set("MIME-Version", "1.0")
 
-	if len(m.bcc) > 0 {
-		buffer.WriteString(fmt.Sprintf("Cc: %s\n", strings.Join(m.bcc, ",")))
-	}
-
-	buffer.WriteString("MIME-Version: 1.0\n")
-
-	writer := multipart.NewWriter(buffer)
-	boundary := writer.Boundary()
+	allRecipients := make([]string, 0, len(m.to)+len(m.cc)+len(m.bcc))
+	allRecipients = append(allRecipients, m.to...)
+	allRecipients = append(allRecipients, m.cc...)
+	allRecipients = append(allRecipients, m.bcc...)
 
 	if len(m.Attachments) > 0 {
 
-		buffer.WriteString(fmt.Sprintf("Content-Type: multipart/mixed; boundary=%s\n", boundary))
-		buffer.WriteString(fmt.Sprintf("--%s\n", boundary))
+		multipartWriter := multipart.NewWriter(buffer)
+		header.Set("Content-Type", fmt.Sprintf("multipart/mixed; boundary=%s", multipartWriter.Boundary()))
 
-	} else {
-		buffer.WriteString("Content-type: text/plain; charset=utf-8\n")
-	}
+		for k, v := range header {
+			buffer.WriteString(fmt.Sprintf("%s: %s\n", k, strings.Join(v, ", ")))
+		}
+		buffer.WriteString("\n")
 
-	buffer.WriteString(m.body)
+		textPartHeaders := make(textproto.MIMEHeader)
+		textPartHeaders.Set("Content-Type", "text/plain; charset=utf-8")
 
-	if len(m.Attachments) > 0 {
+		bodyPart, err := multipartWriter.CreatePart(textPartHeaders)
+		if err != nil {
+			fmt.Println("Error creating body part:", err)
+			return nil, nil
+		}
+		bodyPart.Write([]byte(m.body))
 
 		for filename, data := range m.Attachments {
 
-			buffer.WriteString(fmt.Sprintf("\n\n--%s\n", boundary))
-			buffer.WriteString(fmt.Sprintf("Content-Type: %s\n", http.DetectContentType(data)))
-			buffer.WriteString("Content-Transfer-Encoding: base64\n")
-			buffer.WriteString(fmt.Sprintf("Content-Disposition: attachment; filename=%s\n", filename))
+			attachmentPartHeaders := make(textproto.MIMEHeader)
+			contentType := "application/octet-stream"
 
-			base_encoding := make([]byte, base64.StdEncoding.EncodedLen(len(data)))
-			base64.StdEncoding.Encode(base_encoding, data)
-			buffer.Write(base_encoding)
-			buffer.WriteString(fmt.Sprintf("\n--%s", boundary))
+			if strings.HasSuffix(filename, ".txt") {
+				contentType = "text/plain"
+			} else if strings.HasSuffix(filename, ".pdf") {
+				contentType = "application/pdf"
+			} else if strings.HasSuffix(filename, ".jpg") || strings.HasSuffix(filename, ".jpeg") {
+				contentType = "image/jpeg"
+			} else if strings.HasSuffix(filename, ".png") {
+				contentType = "image/png"
+			}
 
+			attachmentPartHeaders.Set("Content-Type", contentType)
+			attachmentPartHeaders.Set("Content-Transfer-Encoding", "base64")
+			attachmentPartHeaders.Set("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, filename))
+
+			attachmentPart, err := multipartWriter.CreatePart(attachmentPartHeaders)
+			if err != nil {
+				fmt.Println("Error creating attachment part:", err)
+				return nil, nil
+			}
+
+			encoder := base64.NewEncoder(base64.StdEncoding, attachmentPart)
+			encoder.Write(data)
+			encoder.Close()
 		}
 
-		buffer.WriteString("--")
+		multipartWriter.Close()
 
+	} else {
+
+		header.Set("Content-Type", "text/plain; charset=utf-8")
+
+		for k, v := range header {
+			buffer.WriteString(fmt.Sprintf("%s: %s\n", k, strings.Join(v, ", ")))
+		}
+		buffer.WriteString("\n")
+		buffer.WriteString(m.body)
 	}
 
-	return buffer.Bytes()
-
+	return buffer.Bytes(), allRecipients
 }
