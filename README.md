@@ -71,7 +71,13 @@ The mail package allows you to create and send emails using a simple API.
 
 ## Contributions
 
-This is a project I work on primarily for learning purposes. Sometimes I rewrite entire lines of code when I see something doesn't work in a personal application that I'm dogfooding the packages on or change significant logic that will break changes. For instance; go-toolkit used to be go-utilities which was a large package with different modules for mail etc. Now it is akin to a mono repo of sorts for different much smaller packages. Use the packages at your own risk. On the other hand; I am accepting code reviews and suggestions for what to work on next. If interested, send an email to **malawianprogrammer@gmail.com**. 
+This is a project I work on primarily for learning purposes. 
+
+Sometimes I rewrite entire lines of code when I see something doesn't work in a personal application that I'm dogfooding the packages on or change significant logic that will break changes. For instance; go-toolkit used to be go-utilities which was a large package with different modules for mail etc. Now it is akin to a mono repo of sorts for different much smaller packages. 
+
+Use the packages at your own risk. I am not currently accepting contributions. Fork it instead.
+
+On the other hand; I am accepting code reviews and suggestions for what to work on next. If interested, send an email to **malawianprogrammer@gmail.com**. 
 
 ## License
 
