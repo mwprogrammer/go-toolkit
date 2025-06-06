@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+// Represents the content that is then sent via email.
 type Message struct {
 	to          []string
 	cc          []string
@@ -20,26 +21,33 @@ type Message struct {
 	Attachments map[string][]byte
 }
 
+// Adds a main receipient.
 func (m *Message) AddTo(recipient string) {
 	m.to = append(m.to, recipient)
 }
 
+// Adds a cc receipient.
 func (m *Message) AddCC(cc_recipient string) {
 	m.cc = append(m.cc, cc_recipient)
 }
 
+// Add a bcc receipient.
 func (m *Message) AddBCC(bcc_recipient string) {
 	m.bcc = append(m.bcc, bcc_recipient)
 }
 
+// Adds a subject.
 func (m *Message) AddSubject(subject string) {
 	m.subject = subject
 }
 
+// Adds a body.
 func (m *Message) AddBody(body string) {
 	m.body = body
 }
 
+// Attaches a file to the message. Currently supports pdfs,
+// jpgs and pngs. More formats to be added and tested soon.
 func (m *Message) AttachFile(path string) error {
 
 	file, err := os.ReadFile(path)
@@ -55,6 +63,8 @@ func (m *Message) AttachFile(path string) error {
 	return nil
 }
 
+// Constructs the message before transforming it into an array of bytes as
+// a pre-processing step before sending through the smtp client.
 func (m *Message) ToBytes() ([]byte, []string) {
 
 	buffer := bytes.NewBuffer(nil)

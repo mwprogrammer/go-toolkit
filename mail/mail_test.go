@@ -1,18 +1,16 @@
-package tests
+package mail
 
 import (
 	"testing"
-
-	"github.com/mwprogrammer/go-utilities/mail"
 )
 
 func TestSendMessage(t *testing.T) {
 
-	sender := mail.GetSender()
-	sender.Configure("smtp.office365.com", "no.reply@nbs.mw", "Reports@21", "587")
+	sender := GetSender()
+	sender.Configure("host", "username", "password", "port")
 
-	message := mail.CreateMessage()
-	message.AddTo("chisomo.chiweza@nbs.mw")
+	message := CreateMessage()
+	message.AddTo("example@gmail.com")
 	message.AddSubject("TEST SENDING MESSAGE")
 	message.AddBody("Test sending message.")
 
@@ -26,12 +24,12 @@ func TestSendMessage(t *testing.T) {
 
 func TestSendMessageWithCC(t *testing.T) {
 
-	sender := mail.GetSender()
-	sender.Configure("smtp.office365.com", "no.reply@nbs.mw", "Reports@21", "587")
+	sender := GetSender()
+	sender.Configure("host", "username", "password", "port")
 
-	message := mail.CreateMessage()
-	message.AddTo("chisomo.chiweza@nbs.mw")
-	message.AddCC("liana.chagunda@nbs.mw")
+	message := CreateMessage()
+	message.AddTo("example@gmail.com")
+	message.AddCC("example@outlook.com")
 	message.AddSubject("TEST SENDING MESSAGE WITH CC")
 	message.AddBody("Test sending message with cc.")
 
@@ -45,13 +43,13 @@ func TestSendMessageWithCC(t *testing.T) {
 
 func TestSendMessageWithBCC(t *testing.T) {
 
-	sender := mail.GetSender()
-	sender.Configure("smtp.office365.com", "no.reply@nbs.mw", "Reports@21", "587")
+	sender := GetSender()
+	sender.Configure("host", "username", "password", "port")
 
-	message := mail.CreateMessage()
-	message.AddTo("chisomo.chiweza@nbs.mw")
-	message.AddCC("liana.chagunda@nbs.mw")
-	message.AddBCC("ekariorama.magaleta@nbs.mw")
+	message := CreateMessage()
+	message.AddTo("example@gmail.com")
+	message.AddCC("example@outlook.com")
+	message.AddBCC("example@proton.me")
 	message.AddSubject("TEST SENDING MESSAGE WITH BCC")
 	message.AddBody("Test sending message with bcc.")
 
@@ -64,15 +62,15 @@ func TestSendMessageWithBCC(t *testing.T) {
 
 func TestSendMessageWithAttachments(t *testing.T) {
 
-	sender := mail.GetSender()
-	sender.Configure("smtp.office365.com", "no.reply@nbs.mw", "Reports@21", "587")
+	sender := GetSender()
+	sender.Configure("host", "username", "password", "port")
 
-	message := mail.CreateMessage()
-	message.AddTo("chisomo.chiweza@nbs.mw")
+	message := CreateMessage()
+	message.AddTo("example@gmail.com")
 	message.AddSubject("TEST SIMPLE MESSAGE WITH ATTACHMENTS")
 	message.AddBody("Test sending message with attachments.")
 
-	err := message.AttachFile("../tests/attachments/2025_Computer Science.pdf")
+	err := message.AttachFile("..path/to/file")
 
 	if err != nil {
 		t.Errorf("Attachment not added, error encountered: %s", err.Error())

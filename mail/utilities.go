@@ -5,6 +5,15 @@ import (
 	"net/smtp"
 )
 
+type settings struct {
+	host     string
+	username string
+	password string
+	port     string
+}
+
+var config *settings
+
 type Auth struct {
 	username, password string
 }

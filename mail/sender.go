@@ -8,19 +8,13 @@ import (
 	"net/smtp"
 )
 
-type settings struct {
-	host     string
-	username string
-	password string
-	port     string
-}
-
-var config *settings
-
+// Represents an entity that connects to the specified email
+// server and is used to send emails.
 type Sender struct {
 	auth smtp.Auth
 }
 
+// Configure the email server's details.
 func (s *Sender) Configure(host, username, password, port string) {
 
 	config = &settings{
@@ -34,6 +28,7 @@ func (s *Sender) Configure(host, username, password, port string) {
 
 }
 
+// Sends an email. Only servers that support TLS can use this.
 func (s *Sender) Send(email *Message) error {
 
 	if config == nil {
