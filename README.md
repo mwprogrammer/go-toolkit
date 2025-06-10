@@ -1,15 +1,6 @@
 # go-toolkit
 
-A collection of small but useful packages that I use in my go applications. I primarily created this collection as a way to learn go as I learn best by solving problems. Apart from improving my go abilities - it's also been fun to learn about how common utilities are implemented at a lower level as I'm attempting to implement the packages using mostly Go's std library.
-
-## Table of Contents
-
-1. Packages
-    - [Mail](#packages) - a simple package for creating and sending emails in golang applications.
-    - [Http]() - an easier but (hopefully!) flexible way of making HTTP requests.
-2. Roadmap
-3. Contributing
-4. License
+A collection of small but useful packages that I use in my go applications. I primarily created this collection as a way to learn go as I learn best by solving problems. As a bonus, I've grown to also learn a little bit about how things are implemented at a lower level as I am attempting to implement these packages using just the standard library.
 
 ## Packages
 
@@ -72,19 +63,21 @@ The mail package allows you to create and send emails using a simple API.
 
 ## Roadmap
 
--   [x] Http - the package that started it all. Implementing and dogfooding this largely informed many of the ideas I learned managing the balance between abstraction and flexibility.
--   [x] Mail - had fun learning a bit more about the SMTP protocol.
--   [ ] Logging - I honestly thought; this would be a wrapper around slog and that's it. But man was I surprised at how many headaches implementing this wrongly caused me.
+-   [x] Mail - Had fun learning a bit more about the SMTP protocol.
+-   [ ] Http - Implementing and dogfooding this largely informs many of the ideas I have learned managing the balance between abstraction and flexibility.
+-   [ ] Logging - I honestly thought I'd provide a wrapper for slog and call it a day. Dogfooding this was a bit painful but educational.
 -   [ ] Databases? - I'm trying to implement my own 'mini-orm' in another application and depending on the results of that experiment ... maybe I will add this package. I dunno.
 -   [ ] Jobs? - I recently wrote a windows service successfully in Go. The design for what to externalize into a separate package felt finicky but the experience made me wonder if perhaps I could design a more general package for creating background jobs and the like. Would be my most ambitious package to date.
 
 ## Contributions
 
-This is a project I work on primarily for learning purposes. I don't intend it to be used by others as there is still much testing to do. I mean, I won't stop you if you decide to use it but just giving you a heads up ey?
+This is a project I work on primarily for learning purposes. 
 
-Sometimes I rewrite entire lines of code when I see something doesn't work in a personal application that I'm dogfooding the packages on. As a result I'm currently not accepting contributions.
+Sometimes I rewrite entire lines of code when I see something doesn't work in a personal application that I'm dogfooding the packages on or change significant logic that will break changes. For instance; go-toolkit used to be go-utilities which was a large package with different modules for mail etc. Now it is akin to a mono repo of sorts for different much smaller packages. 
 
-On the other hand; I accept code reviews and suggestions for what to work on next. If interested, send an email to [malawianprogrammer@gmail.com]()
+Use the packages at your own risk. I am not currently accepting contributions. Fork it instead.
+
+On the other hand; I am accepting code reviews and suggestions for what to work on next. If interested, send an email to **malawianprogrammer@gmail.com**. 
 
 ## License
 
