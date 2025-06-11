@@ -99,7 +99,7 @@ The http package seeks to be a clean but configurable http utility library.
 ```go
 
     // Add authorization tokens and other custom headers.
-    // Content-type is auto-populated by the utility functions like http.JSONBody().
+    // Content-type is auto-populated by utility functions like http.JSONBody().
     headers := make(map[string]string)
 	headers["Authorization"] = "Bearer token..."
 
@@ -124,7 +124,7 @@ The http package seeks to be a clean but configurable http utility library.
 		fmt.Println(err.Error())
 	}
 
-    // View the outpu.
+    // View the output.
 	if response != nil {
 		fmt.Println(response.StatusCode)
 		fmt.Println(response.Response)
