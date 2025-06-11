@@ -5,6 +5,7 @@ import (
 	"net/smtp"
 )
 
+// A private object to keep the sender's settings.
 type settings struct {
 	host     string
 	username string
@@ -14,6 +15,10 @@ type settings struct {
 
 var config *settings
 
+// Auth implements the Auth interface and allows for the sender to use
+// LoginAuth rather than PlainAuth which is the default in smtp.
+//
+// Email providers like outlook do not work with PlainAuth.
 type Auth struct {
 	username, password string
 }
